@@ -27,7 +27,7 @@ class User extends Authenticatable
 
     protected $primaryKey = 'nip';
 
-    public $incrementing = false; // karena primary key bukan auto increment
+    public $incrementing = false; //
 
     /**
      * The attributes that should be hidden for serialization.
