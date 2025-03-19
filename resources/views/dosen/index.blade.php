@@ -66,15 +66,22 @@
                                                 <td>{{ $lecturer->birth_date }}</td>
                                                 <td>
                                                     <div class="form-button-action">
-                                                        <button type="button" data-bs-toggle="tooltip" title=""
-                                                            class="btn btn-link btn-primary btn-lg"
-                                                            data-original-title="Edit Task">
+                                                        <button type="button" data-bs-toggle="tooltip" title="Edit Dosen"
+                                                            class="btn btn-link btn-primary btn-lg edit-dosen"
+                                                            data-original-title="Edit Dosen"
+                                                            data-url="{{ route('dosenEdit', [$lecturer->nik]) }}">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <button type="button" data-bs-toggle="tooltip" title=""
-                                                            class="btn btn-link btn-danger" data-original-title="Remove">
-                                                            <i class="fa fa-times"></i>
-                                                        </button>
+                                                        <form method="POST"
+                                                            action="{{ route('dosenDelete', [$lecturer->nik]) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" data-bs-toggle="tooltip" title=""
+                                                                class="btn btn-link btn-danger del-dosen"
+                                                                data-original-title="Remove">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </form>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -94,4 +101,30 @@
 @endsection
 
 @section('ExtraJS')
+    <script src="{{ asset('assets/js/plugin/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <script>
+        $(".edit-dosen").click(function() {
+            window.location.href = $(this).data("url")
+        })
+        $(".del-dosen").click(function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: "Are you sure want to delete this data?",
+                showCancelButton: true,
+                confirmButtonText: "Yes"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(e.target).closest("form").submit()
+                }
+            })
+        })
+        @if (session('status'))
+            $.notify({
+                message: "{{ session('status') }}"
+            }, {
+                delay: 5000,
+                type: "info",
+            })
+        @endif
+    </script>
 @endsection

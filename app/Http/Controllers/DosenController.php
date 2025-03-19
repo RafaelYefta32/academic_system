@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dosen;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class DosenController extends Controller
 {
@@ -57,7 +58,8 @@ class DosenController extends Controller
      */
     public function edit(Dosen $dosen)
     {
-        //
+        return view('dosen.edit')
+            ->with('dosen', $dosen);
     }
 
     /**
@@ -66,6 +68,20 @@ class DosenController extends Controller
     public function update(Request $request, Dosen $dosen)
     {
         //
+        $validateData = validator($request->all(), [
+            'nik' => ['required','string','max:7', Rule::unique('dosen', 'nik')->ignore($dosen->nik, 'nik')],
+            'name' => 'required|string|max:100',
+            'birth_date' => 'required',
+            'email' => ['required','email','max:45', Rule::unique('dosen','email')->ignore($dosen->email, 'email')]
+        ])->validate();
+
+        $dosen['name'] = $validateData['name'];
+        $dosen['birth_date'] = $validateData['birth_date'];
+        $dosen['email'] = $validateData['email'];
+        $dosen->save();
+        // session()->flash('status', 'Dosen berhasil diupdate');
+        return redirect(route('dosenList'))
+            ->with('status', 'Dosen berhasil diupdate');
     }
 
     /**
@@ -74,5 +90,10 @@ class DosenController extends Controller
     public function destroy(Dosen $dosen)
     {
         //
+
+        $dosen->delete();
+        return redirect(route('dosenList'))
+            ->with('status', 'Dosen berhasil diupdate');
+
     }
 }

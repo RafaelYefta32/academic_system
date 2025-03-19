@@ -18,6 +18,9 @@ Route::get('/2', [DemoController::class, 'index']);
 Route::get('/dosen', [DosenController::class, 'index'])->name('dosenList');
 Route::get('/dosen/create', [DosenController::class, 'create'])->name('dosenCreate');
 Route::post('/dosen/create', [DosenController::class, 'store'])->name('dosenStore');
+Route::get('/dosen/edit/{dosen}', [DosenController::class, 'edit'])->name('dosenEdit');
+Route::put('/dosen/edit/{dosen}', [DosenController::class, 'update'])->name('dosenUpdate');
+Route::delete('/dosen/delete/{dosen}', [DosenController::class, 'destroy'])->name('dosenDelete');
 
 //mahasiswa route
 Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
